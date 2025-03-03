@@ -6,39 +6,57 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from config import DB_PATH
 
 
-def create_db():
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
-    
-    # Включаем поддержку внешних ключей
+def enable_foreign_keys(cursor):
     cursor.execute("PRAGMA foreign_keys = ON;")
-    
-    # Таблица команд
+
+
+def create_leagues_table(cursor):
     cursor.execute("""
-        CREATE TABLE teams (
+        CREATE TABLE leagues (
             id INTEGER PRIMARY KEY,
-            team TEXT NOT NULL
+            league_name TEXT NOT NULL,
+            country TEXT,
+            start_date DATE,
+            end_date DATE,
+            matches_played INTEGER,
+            total_matches INTEGER
         );
     """)
 
-    # Таблица матчей
+
+def create_teams_table(cursor):
+    cursor.execute("""
+        CREATE TABLE teams (
+            id INTEGER PRIMARY KEY,
+            team TEXT NOT NULL,
+            league_id INTEGER,
+            stadium TEXT,
+            FOREIGN KEY (league_id) REFERENCES leagues(id)
+        );
+    """)
+
+
+def create_matches_table(cursor):
     cursor.execute("""
         CREATE TABLE matches (
             id_match INTEGER PRIMARY KEY,
-            team1 INTEGER,
-            team2 INTEGER,
-            score1 INTEGER,
-            score2 INTEGER,
+            league_id INTEGER,
+            home_team INTEGER,
+            away_team INTEGER,
+            score_home INTEGER,
+            score_away INTEGER,
             stadium TEXT,
             weather TEXT,
             referee TEXT,
             match_date DATE,
-            FOREIGN KEY (team1) REFERENCES teams(id),
-            FOREIGN KEY (team2) REFERENCES teams(id)
+            FOREIGN KEY (league_id) REFERENCES leagues(id),
+            FOREIGN KEY (home_team) REFERENCES teams(id),
+            FOREIGN KEY (away_team) REFERENCES teams(id)
         );
     """)
 
-    # Таблица статистики
+
+def create_stats_table(cursor):
     cursor.execute("""
         CREATE TABLE stats (
             id_match INTEGER,
@@ -68,7 +86,9 @@ def create_db():
             FOREIGN KEY (id_match) REFERENCES matches(id_match) ON DELETE CASCADE
         );
     """)
-    
+
+
+def create_commands_table(cursor):
     cursor.execute("""
         CREATE TABLE commands (
             id_match INTEGER,
@@ -91,6 +111,22 @@ def create_db():
         );
     """)
 
+
+def create_db():
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    enable_foreign_keys(cursor)
+    create_leagues_table(cursor)
+    create_teams_table(cursor)
+    create_matches_table(cursor)
+    create_stats_table(cursor)
+    create_commands_table(cursor)
+
     conn.commit()
     conn.close()
     print("✅ База данных создана!")
+
+
+# Если нужно, можем сразу вызвать функцию для создания БД
+# create_db()
