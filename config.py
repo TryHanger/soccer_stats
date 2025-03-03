@@ -3,3 +3,5 @@ HEADERS = {
 }
 
 DB_PATH = "football.db"
+
+CONFIG_PATH = "config.json"

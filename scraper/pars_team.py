@@ -24,7 +24,7 @@ def get_team_matches(team_id):
         link = match.find("a", href=True)
         if link:
             match_links.append(f"https://soccer365.ru{link['href']}")
-        if len(match_links) >= 1:
+        if len(match_links) >= 20:
             break
     
     return match_links
