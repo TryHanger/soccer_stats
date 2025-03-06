@@ -1,44 +1,33 @@
-import sqlite3
-from config import DB_PATH
+from scraper.pars_team import get_team_matches
+from scraper.pars_game import parse_game
+from database.create_db import create_db
+from scraper.update_match import update_matches, update_all_teams
+from scraper.pars_league import parse_league_info 
+from scraper.pars_teams import get_teams
 
-def get_team_matches(team_name):
-    conn = sqlite3.connect(DB_PATH)
-    cursor = conn.cursor()
+def main():
+    # Создаем базу данных
+    # create_db()
     
-    # Включаем поддержку внешних ключей
-    cursor.execute("PRAGMA foreign_keys = ON;")
+    # Парсим информацию о лиге
+    league_info = parse_league_info(18)
+    print(league_info)
     
-    query = """
-    SELECT 
-        matches.id_match,
-        t1.team AS team1,
-        t2.team AS team2,
-        matches.score1,
-        matches.score2,
-        matches.stadium,
-        matches.weather,
-        matches.referee,
-        matches.match_date
-    FROM matches
-    JOIN teams t1 ON matches.team1 = t1.id
-    JOIN teams t2 ON matches.team2 = t2.id
-    WHERE t1.team = ? OR t2.team = ?
-    ORDER BY matches.match_date DESC;
-    """
+    # Получаем команды в лиге
+    teams = get_teams(12)
+    print(teams)
     
-    cursor.execute(query, (team_name, team_name))
-    matches = cursor.fetchall()
-    conn.close()
+    # # Обновляем все команды
+    # update_all_teams()
     
-    if matches:
-        print(f"Матчи для команды '{team_name}':\n")
-        for match in matches:
-            print(f"ID матча: {match[0]}")
-            print(f"{match[1]} {match[3]} - {match[4]} {match[2]}")
-            print(f"Стадион: {match[5]}, Погода: {match[6]}, Судья: {match[7]}")
-            print(f"Дата: {match[8]}\n")
-    else:
-        print(f"Матчи для команды '{team_name}' не найдены")
+    # # Парсим матчи для каждой команды
+    # for team in teams:
+    #     matches = get_team_matches(team['id'])
+    #     for match in matches:
+    #         # Парсим данные каждого матча
+    #         match_data = parse_game(match['id'])
+    #         # Сохраняем данные матча в базу данных
+    #         update_matches(match_data)
 
-# Пример вызова
-get_team_matches("Ливерпуль")
+if __name__ == "__main__":
+    main()

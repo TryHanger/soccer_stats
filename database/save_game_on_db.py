@@ -10,34 +10,34 @@ def match_exists(match_id):
     conn.close()
     return result is not None
 
-def save_team(team_name):
+def save_team(team_name, league_id):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    cursor.execute("SELECT id FROM teams WHERE team = ?", (team_name,))
+    cursor.execute("SELECT id FROM teams WHERE team = ? AND league_id = ?", (team_name, league_id))
     result = cursor.fetchone()
     
     if result:
         team_id = result[0]
     else:
-        cursor.execute("INSERT INTO teams (team) VALUES (?)", (team_name,))
+        cursor.execute("INSERT INTO teams (team, league_id) VALUES (?, ?)", (team_name, league_id))
         team_id = cursor.lastrowid
         
     conn.commit()
     conn.close()
     return team_id
 
-def save_match(match_id, team1, team2, score1, score2, stadium, weather, referee, match_date):
+def save_match(match_id, league_id, team1, team2, score1, score2, stadium, weather, referee, match_date):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
     
-    team1_id = save_team(team1)
-    team2_id = save_team(team2)
+    team1_id = save_team(team1, league_id)
+    team2_id = save_team(team2, league_id)
     
     cursor.execute("""
-        INSERT INTO matches (id_match, team1, team2, score1, score2, stadium, weather, referee, match_date)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)               
-    """, (match_id, team1_id, team2_id, score1, score2, stadium, weather, referee, match_date))
+        INSERT INTO matches (id_match, league_id, home_team, away_team, score_home, score_away, stadium, weather, referee, match_date)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)               
+    """, (match_id, league_id, team1_id, team2_id, score1, score2, stadium, weather, referee, match_date))
     conn.commit()
     conn.close()
     

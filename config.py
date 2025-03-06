@@ -4,4 +4,5 @@ HEADERS = {
 
 DB_PATH = "football.db"
 
-CONFIG_PATH = "config.json"
+LEAGUES_PATH = "json_files/leagues.json"
+CONFIG_PATH = "json_files/config.json"

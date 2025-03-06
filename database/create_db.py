@@ -14,6 +14,7 @@ def create_leagues_table(cursor):
     cursor.execute("""
         CREATE TABLE leagues (
             id INTEGER PRIMARY KEY,
+            url_id  INTEGER,
             league_name TEXT NOT NULL,
             country TEXT,
             start_date DATE,
@@ -23,15 +24,15 @@ def create_leagues_table(cursor):
         );
     """)
 
-
 def create_teams_table(cursor):
     cursor.execute("""
         CREATE TABLE teams (
-            id INTEGER PRIMARY KEY,
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
             team TEXT NOT NULL,
-            league_id INTEGER,
+            league_id INTEGER NOT NULL,
             stadium TEXT,
-            FOREIGN KEY (league_id) REFERENCES leagues(id)
+            FOREIGN KEY (league_id) REFERENCES leagues(id),
+            UNIQUE (team, league_id)
         );
     """)
 
@@ -111,22 +112,56 @@ def create_commands_table(cursor):
         );
     """)
 
-
 def create_db():
+    if os.path.exists(DB_PATH):
+        print("✅ База данных уже существует. Создание не требуется.")
+        return
+
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
 
-    enable_foreign_keys(cursor)
-    create_leagues_table(cursor)
-    create_teams_table(cursor)
-    create_matches_table(cursor)
-    create_stats_table(cursor)
-    create_commands_table(cursor)
+    try:
+        enable_foreign_keys(cursor)
+        create_leagues_table(cursor)
+        create_teams_table(cursor)
+        create_matches_table(cursor)
+        create_stats_table(cursor)
+        create_commands_table(cursor)
 
-    conn.commit()
-    conn.close()
-    print("✅ База данных создана!")
+        conn.commit()
+        print("✅ База данных успешно создана!")
+    except Exception as e:
+        print(f"❌ Ошибка при создании базы данных: {e}")
+        conn.rollback()
+    finally:
+        conn.close()
 
 
-# Если нужно, можем сразу вызвать функцию для создания БД
-# create_db()
+def recreate_db():
+    """Перезаписывает базу данных: удаляет старую и создаёт новую."""
+    if os.path.exists(DB_PATH):
+        try:
+            os.remove(DB_PATH)
+            print("🗑️ Старая база данных удалена.")
+        except Exception as e:
+            print(f"❌ Ошибка при удалении базы данных: {e}")
+            return
+    
+    conn = sqlite3.connect(DB_PATH)
+    cursor = conn.cursor()
+
+    try:
+        enable_foreign_keys(cursor)
+        create_leagues_table(cursor)
+        create_teams_table(cursor)
+        create_matches_table(cursor)
+        create_stats_table(cursor)
+        create_commands_table(cursor)
+
+        conn.commit()
+        print("✅ Новая база данных успешно создана!")
+    except Exception as e:
+        print(f"❌ Ошибка при создании базы данных: {e}")
+        conn.rollback()
+    finally:
+        conn.close()
