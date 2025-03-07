@@ -11,7 +11,7 @@ from database.save_game_on_db import match_exists
 def add_info():
     leagues = load_config()
     print(leagues) 
-    league_ids = [league['id'] for league in leagues]
+    league_ids = [league['id'] for league in leagues if 'id' in league]
 
     for league_id in league_ids:
         print(league_id)
@@ -32,24 +32,15 @@ def add_info():
             
             for link in game_links:
                 match_id = link.rstrip('/').split('/')[-1]
-                
                 if not match_id.isdigit():
                     print(f"❌ Ошибка: Некорректный match_id в ссылке {link}")
                     continue
                 
                 if match_exists(match_id):
-                    print(f"✅ Матч {match_id} уже есть в базе")
+                    print(f"⚠️ Матч {match_id} уже существует в базе данных")
                     continue
                 
-                max_retries = 3
-                for attempt in range(max_retries):
-                    try:
-                        print(f"🔵 Парсинг матча: {link} (Попытка {attempt + 1})")
-                        parse_game(link, leagues)
-                        break
-                    except Exception as e:
-                        print(f"❌ Ошибка при обработке матча {match_id}: {e}")
-                        if attempt < max_retries - 1:
-                            time.sleep(5)  # Подождать перед повторной попыткой
-                        else:
-                            print(f"⛔ Не удалось спарсить матч {match_id} после {max_retries} попыток.")
+                leagues = parse_game(link, leagues)
+                print(f"Матч спаршен {match_id}")
+                
+                time.sleep(1)

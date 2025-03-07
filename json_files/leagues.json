@@ -1,52 +1,114 @@
 [
     {
-        "id": 12,
-        "name": ["Premier League", "Премьер-лига"],
+        "id": "16",
+        "name": [
+            "La Liga",
+            "Ла Лига",
+            "Ла Лига EA Sports",
+            "Примера"
+        ],
         "tier": 1
     },
     {
-        "id": 16,
-        "name": ["La Liga", "Ла Лига", "Ла Лига EA Sports", "Примера"],
+        "id": "12",
+        "name": [
+            "Premier League",
+            "Премьер-лига",
+            "Премьер-Лига"
+        ],
         "tier": 1
     },
     {
-        "id": 15,
-        "name": ["Серия А", "Serie A", "Серия А Enilive"],
+        "id": "15",
+        "name": [
+            "Серия А",
+            "Serie A",
+            "Серия А Enilive"
+        ],
         "tier": 1
     },
     {
-        "id": 17,
-        "name": ["Бундеслига", "Bundesliga"],
+        "id": "17",
+        "name": [
+            "Бундеслига",
+            "Bundesliga"
+        ],
         "tier": 1
     },
     {
-        "id": 18,
-        "name": ["Лига 1", "Ligue 1", "Лига 1 McDonald’s"],
+        "id": "18",
+        "name": [
+            "Лига 1",
+            "Ligue 1",
+            "Лига 1 McDonald’s"
+        ],
         "tier": 1
     },
     {
-        "id": 681,
-        "name": ["Лига Betclic", "Примейра-лига"],
+        "id": "681",
+        "name": [
+            "Лига Betclic",
+            "Примейра-лига"
+        ],
         "tier": 1
     },
     {
-        "id": 19,
-        "name": ["Лига чемпионов УЕФА", "UEFA Champions League"],
+        "id": "19",
+        "name": [
+            "Лига чемпионов УЕФА",
+            "UEFA Champions League"
+        ],
         "tier": 0
     },
     {
-        "id": 20,
-        "name": ["Лига Европы УЕФА", "UEFA Europa League"],
+        "id": "20",
+        "name": [
+            "Лига Европы УЕФА",
+            "UEFA Europa League"
+        ],
         "tier": 0
     },
     {
-        "id": 2032,
-        "name": ["Лига конференций УЕФА", "UEFA Conference League"],
+        "id": "2032",
+        "name": [
+            "Лига конференций УЕФА",
+            "UEFA Conference League"
+        ],
         "tier": 0
     },
     {
-        "id": 903,
-        "name": "UEFA Super Cup",
-        "tier": 0
+        "id": "758",
+        "name": "Кубок Испании",
+        "tier": 1
+    },
+    {
+        "id": "301",
+        "name": "Суперкубок",
+        "tier": 1
+    },
+    {
+        "id": "438",
+        "name": "Неизвестная лига 438",
+        "tier": 1
+    },
+    {
+        "id": "23",
+        "name": "Emirates Кубок ФА",
+        "tier": 1
+    },
+    {
+        "id": "21",
+        "name": "Кубок Carabao",
+        "tier": 1
+    },
+    {
+        "id": "821",
+        "name": "Кубок Италии Frecciarossa",
+        "tier": 1
+    },
+    {
+        "id": "911",
+        "name": "Суперкубок",
+        "tier": 1
     }
 ]

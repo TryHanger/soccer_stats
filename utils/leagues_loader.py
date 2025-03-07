@@ -13,3 +13,12 @@ def load_config():
         print(f"❌ Ошибка в формате JSON файла {LEAGUES_PATH}.")
         return {}
     
+def save_league_json(data):
+    
+    leagues = load_config()    
+    
+    new_league = {"id": data["url_id"], "name": data["league_name"], "tier": 1}
+    leagues.append(new_league)
+    
+    with open(LEAGUES_PATH, "w", encoding="utf-8") as f:
+        json.dump(leagues, f, ensure_ascii=False, indent=4)

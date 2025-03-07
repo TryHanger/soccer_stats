@@ -29,10 +29,8 @@ def create_teams_table(cursor):
         CREATE TABLE teams (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             team TEXT NOT NULL,
-            league_id INTEGER NOT NULL,
             stadium TEXT,
-            FOREIGN KEY (league_id) REFERENCES leagues(id),
-            UNIQUE (team, league_id)
+            UNIQUE (team)
         );
     """)
 
